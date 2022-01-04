@@ -167,7 +167,7 @@ namespace TaxiWebApplication.Services
             return data;
         }
 
-        public double DistanceToDest(double[] unknown, double[] data)
+        public static double DistanceToDest(double[] unknown, double[] data)
         {
             for (int i = 0; i <= 1; i++)
             {

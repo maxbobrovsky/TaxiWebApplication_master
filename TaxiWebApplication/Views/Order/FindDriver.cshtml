@@ -12,8 +12,8 @@
     <div class="col-6">
         <input type="button" id="findDriver" value="Find driver" />
     </div>
-    <h1>@ViewData["Lattitude"]</h1>
-    <h1>@ViewData["Longitude"]</h1>
+    <h1 id="lat">@ViewData["Lattitude"]</h1>
+    <h1 id="lon">@ViewData["Longitude"]</h1>
 
     <div class="row">
         <div class="col-6">
@@ -38,7 +38,7 @@
         document.getElementById("findDriver").addEventListener("click", function (e) {
 
 
-            connection.invoke("Send");
+            connection.invoke("Send", document.getElementById("lat").innerText, document.getElementById("lon").innerText);
         });
 
         connection.start();

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxiWebApplication.Models;
+using TaxiWebApplication.Services;
 using TaxiWebApplication.ViewModels;
 
 namespace TaxiWebApplication
@@ -24,7 +25,7 @@ namespace TaxiWebApplication
         private IMemoryCache _cache;
 
         [Authorize]
-        public async Task Send()
+        public async Task Send(string user_lat, string user_lon)
         {
             var user = Context.User;
             var userName = Context.User.Identity.Name;
@@ -63,7 +64,9 @@ namespace TaxiWebApplication
             {
                 if (_cache.TryGetValue(u.UserName, out coord))
                 {
-                    names.Add((u.UserName + " " + coord.Lattitude + " " + coord.Longitude));
+                   // names.Add((u.UserName + " " + coord.Lattitude + " " + coord.Longitude));
+
+                    names.Add(u.UserName + " " + KnnService.DistanceToDest(new double[] { double.Parse(user_lat), double.Parse(user_lon) }, new double[] { coord.Lattitude, coord.Longitude}) + " km-s to you");
                 }
                 continue;
             }
