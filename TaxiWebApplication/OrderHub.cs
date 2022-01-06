@@ -75,5 +75,10 @@ namespace TaxiWebApplication
             await Clients.User(Context.UserIdentifier).SendAsync("Receive", string.Join(" ", names));
 
         }
+
+        public async Task SelectDriver()
+        {
+
+        }
     }
 }
