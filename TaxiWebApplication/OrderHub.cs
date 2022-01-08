@@ -17,10 +17,7 @@ namespace TaxiWebApplication
         {
             _context = context;
             _cache = cache;
-            //usersId = _context.Users.ToList();        
         }
-
-        //List usersId = new List<string>();
         private ApplicationContext _context;
         private IMemoryCache _cache;
 
@@ -29,12 +26,6 @@ namespace TaxiWebApplication
         {
             var user = Context.User;
             var userName = Context.User.Identity.Name;
-
-            //var userName = user.IsInRole("user");
-
-            //var drivers = _context.Users.Where(x => x.UserName != "").ToString();
-
-            //var drivers = _context.Users.Where(x => x.UserName != "");
 
             var Helper_drivers = _context.Users.Join(_context.UserRoles,
                                     u => u.Id,
@@ -53,8 +44,7 @@ namespace TaxiWebApplication
                                               {
                                                   UserName = h.NickName,
                                                   Role = ro.Name
-                                              }).Where(x => x.Role == "driver");
-                                               
+                                              }).Where(x => x.Role == "driver");                                             
 
             List<string> names = new List<string>();
 
@@ -64,21 +54,12 @@ namespace TaxiWebApplication
             {
                 if (_cache.TryGetValue(u.UserName, out coord))
                 {
-                   // names.Add((u.UserName + " " + coord.Lattitude + " " + coord.Longitude));
-
                     names.Add(u.UserName + " " + KnnService.DistanceToDest(new double[] { double.Parse(user_lat), double.Parse(user_lon) }, new double[] { coord.Lattitude, coord.Longitude}) + " km-s to you");
                 }
                 continue;
             }
 
-
             await Clients.User(Context.UserIdentifier).SendAsync("Receive", string.Join(" ", names));
-
-        }
-
-        public async Task SelectDriver()
-        {
-
         }
     }
 }

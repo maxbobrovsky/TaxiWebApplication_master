@@ -1,7 +1,6 @@
 ﻿@{ Layout = null;
     var one = Convert.ToDecimal(ViewData["Distance"]);
     var two = Convert.ToDecimal(ViewData["Price"]);
-    //var three = 0;
 }
 
 <!DOCTYPE html>
@@ -97,19 +96,15 @@
         }
 
         async function GetAddr(onne, twwo, dest_lat, dest_lon) {
-
-            
             user_address = { FirstLat: onne, FirstLong: twwo, SecondLat: dest_lat, SecondLong: dest_lon };
 
             $('#user_address_for_label').val(user_address.FirstLat + " " + user_address.FirstLong + " " + user_address.SecondLat + " " + user_address.SecondLong);
-
 
             console.log("value", user_address);
             hivo = JSON.stringify(user_address);
 
             console.log(hivo);
             const url = "@Url.Action("VVDistance", "Order")";
-            //debugger;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -124,8 +119,6 @@
 
             my_div = document.getElementById("dist");
             document.body.insertBefore(p, my_div);
-
-
         }
 
 

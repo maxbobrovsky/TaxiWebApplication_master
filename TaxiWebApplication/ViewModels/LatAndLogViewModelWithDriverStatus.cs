@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 
 namespace TaxiWebApplication.ViewModels
 {
-    public class LatAndLogViewModel
+    public class LatAndLogViewModelWithDriverStatus
     {
         public double Lattitude { get; set; }
 
         public double Longitude { get; set; }
 
+        public string Status { get; set; }
     }
 }

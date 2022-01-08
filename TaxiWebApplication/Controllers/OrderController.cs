@@ -47,8 +47,7 @@ namespace TaxiWebApplication.Controllers
 
             int t = _knn.Parse(orderViewModel.Address);
             string[] mas = orderViewModel.Address.Split(' ');
-            //mas[0] = mas[0].Replace('.', ',');
-            //mas[1] = mas[1].Replace('.', ',');
+            
             double[] unknown = new double[2];
             for (int i = 0; i < mas.Length; i++)
             {
@@ -115,12 +114,12 @@ namespace TaxiWebApplication.Controllers
         [Authorize(Roles = "driver")]
         [HttpPost]
 
-        public IActionResult GettingOnTheLine([FromBody] LatAndLogViewModel model)
+        public IActionResult GettingOnTheLine([FromBody] LatAndLogViewModelWithDriverStatus model)
         {
             LatAndLogViewModel helperModel;
             if ((_cache.TryGetValue(User.Identity.Name, out helperModel)))
             {
-                if ((model.Lattitude == helperModel.Lattitude) && (model.Longitude == helperModel.Longitude))
+                if ((model.Lattitude == helperModel.Lattitude) && (model.Longitude == helperModel.Longitude) && (model.Status == "Free"))
                 {
                     _cache.Remove(User.Identity.Name);
                     //RedirectToAction("DriverIndex", "Account");
@@ -139,6 +138,16 @@ namespace TaxiWebApplication.Controllers
             }
 
             return new JsonResult(model);
+        }
+
+        [Authorize(Roles = "user, admin")]
+        [HttpPost]
+
+        public IActionResult OrderWindowPage()
+        {
+
+
+            return View();
         }
 
     }

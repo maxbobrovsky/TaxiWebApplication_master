@@ -19,7 +19,6 @@
         }
 
         async function loadGeo(position) {
-            /*$('#address').val(position.coords.latitude + " " + position.coords.longitude);*/
             console.log(position.coords.latitude);
             console.log(position.coords.longitude);
 
@@ -33,7 +32,6 @@
             }
 
             const url = "@Url.Action("GettingOnTheLine", "Order")";
-            //debugger;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -45,15 +43,9 @@
 
                 console.log(gotObj);
                 setTimeout(() => { clearInterval(reload_page); document.location.href = "https://localhost:5001/Account/DriverIndex"; }, 500);
-                
-
             }
 
-
-
             console.log(gotObj);
-
-
 
         }
 

@@ -7,6 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <title>SignalR ORder</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
 <body>
     <div class="col-6">
@@ -17,8 +18,12 @@
 
     <div class="row">
         <div class="col-6">
-            <ul id="driversList">pp</ul>
+            <ul class="list-group" id="driversList">pp</ul>
         </div>
+    </div>
+
+    <div class="col-6">
+        <input type="button" class="btn btn-primary btn-lg active" value="Autoselect driver" />
     </div>
 
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
@@ -29,8 +34,9 @@
 
         connection.on("Receive", function (userName) {
 
-            var encodedMsg = userName + " is ";
+            var encodedMsg = userName + "";
             var li = document.createElement("li");
+            li.className = 'list-group-item';
             li.textContent = encodedMsg;
             document.getElementById("driversList").appendChild(li);
         });
