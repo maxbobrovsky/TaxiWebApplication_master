@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json.Linq;
 using TaxiWebApplication.Models;
 using TaxiWebApplication.Services;
 using TaxiWebApplication.ViewModels;
@@ -116,7 +117,7 @@ namespace TaxiWebApplication.Controllers
 
         public IActionResult GettingOnTheLine([FromBody] LatAndLogViewModelWithDriverStatus model)
         {
-            LatAndLogViewModel helperModel;
+            LatAndLogViewModelWithDriverStatus helperModel;
             if ((_cache.TryGetValue(User.Identity.Name, out helperModel)))
             {
                 if ((model.Lattitude == helperModel.Lattitude) && (model.Longitude == helperModel.Longitude) && (model.Status == "Free"))
@@ -143,12 +144,12 @@ namespace TaxiWebApplication.Controllers
         [Authorize(Roles = "user, admin")]
         [HttpPost]
 
-        public IActionResult OrderWindowPage()
+        public IActionResult OrderWindowPage([FromBody] LatAndLogViewModel userCoords)
         {
+            //ViewData["Lattitude"] = userCoords.Lattitude;
+            //ViewData["Longitude"] = userCoords.Longitude;
 
-
-            return View();
+            RedirectToAction("GettingOnTheLine", "Order", );
         }
-
     }
 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxiWebApplication.Models;
+using TaxiWebApplication.ViewModels;
 
 namespace TaxiWebApplication
 {
@@ -22,13 +23,18 @@ namespace TaxiWebApplication
             _userManager = userManager;
         }
 
-        public async Task SendToMap(string userName)
+        public async Task SendToMap(string userName, string driverName)
         {
             var user = await _userManager.FindByNameAsync(userName);
             var userId = await _userManager.GetUserIdAsync(user);
+            LatAndLogViewModelWithDriverStatus driverInfo;
+
+            _cache.TryGetValue(driverName, out driverInfo);
+
+            var variableForDriverInfo = driverInfo;
             
             
-            await Clients.Client(userId).SendAsync("hi");
+            await Clients.Client(userId).SendAsync($"{variableForDriverInfo.Lattitude} + {variableForDriverInfo.Longitude}");
         }
     }
 }

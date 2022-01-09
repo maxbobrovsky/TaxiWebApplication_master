@@ -59,6 +59,7 @@ namespace TaxiWebApplication
             };
         });
 
+
             services.AddTransient<GraphRoadService>();
 
             services.AddSingleton<KnnService>();

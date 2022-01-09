@@ -22,15 +22,20 @@
         </div>
     </div>
 
-    <div class="col-6">
-        <input type="button" class="btn btn-primary btn-lg active" value="Autoselect driver" />
-    </div>
+    
+ <input id="CreateOrder" name="model"/>
+ <input id ="GoGoGo" type="button" name="RedirectToOrder"/>
+    
+    
 
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
-    <script>
-        "use strict";
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+
 
         const connection = new signalR.HubConnectionBuilder().withUrl("/orderHub").build();
+
+        let ButtonGo = document.getElementById('GoGoGo');
 
         connection.on("Receive", function (userName) {
 
@@ -48,6 +53,30 @@
         });
 
         connection.start();
+
+        ButtonGo.onclick = async function GoToOrder() {
+
+            let CoordObj = {
+                Lattitude : @ViewData["Lattitude"],
+                Longitude : @ViewData["Longitude"],
+            }
+
+            let CoordObjForSending = JSON.stringify(CoordObj);
+            console.log('hello');
+            $('#CreateOrder').val("@ViewData["Lattitude"]" + " " + "@ViewData["Longitude"]");
+
+            let Drvierurl = "@Url.Action("OrderWindowPage", "Order")";
+
+            const response = await fetch(Drvierurl, {
+                method: 'POST',
+                headers: new Headers({ 'Content-Type': 'application/json' }),
+                body: JSON.stringify(CoordObj),
+            });
+
+            let responseFromContoller = await response.json();
+        };
+
+
     </script>
 </body>
 </html>
