@@ -149,7 +149,20 @@ namespace TaxiWebApplication.Controllers
             //ViewData["Lattitude"] = userCoords.Lattitude;
             //ViewData["Longitude"] = userCoords.Longitude;
 
-            RedirectToAction("GettingOnTheLine", "Order", );
+            double lattitude = userCoords.Lattitude;
+            double longitude = userCoords.Longitude;
+            return RedirectToAction("OrderWindowPageOpen", "Order", new { 
+                HttpContext.User.Identity.Name, lattitude, longitude
+            });
+        }
+
+        public IActionResult OrderWindowPageOpen(string name, double lattitude, double longitude)
+        {
+            ViewData["Lattitude"] = lattitude;
+            ViewData["Longitude"] = longitude;
+            ViewData["Name"] = name;
+
+            return View();
         }
     }
 }
