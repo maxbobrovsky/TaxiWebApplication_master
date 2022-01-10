@@ -74,7 +74,14 @@
             });
 
             let responseFromContoller = await response.json();
-            window.close();
+
+            let OrderDataForWindow = JSON.stringify(responseFromContoller);
+
+            console.log(CoordObj["Lattitude"]);
+            console.log(CoordObj["Longitude"]);
+            
+            window.location.href = '@Url.Action("OrderWindowPageOpen", "Order")' + '?' + CoordObj["Lattitude"] + '&' + CoordObj["Longitude"];
+
         };
 
 

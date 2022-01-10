@@ -48,7 +48,7 @@ namespace TaxiWebApplication.Controllers
 
             int t = _knn.Parse(orderViewModel.Address);
             string[] mas = orderViewModel.Address.Split(' ');
-            
+
             double[] unknown = new double[2];
             for (int i = 0; i < mas.Length; i++)
             {
@@ -58,7 +58,7 @@ namespace TaxiWebApplication.Controllers
             ViewData["Distance"] = unknown[0];
             ViewData["Price"] = unknown[1];
 
-            return RedirectToAction("DistanceAndPrice", "Order", new {distance = unknown[0], price = unknown[1]});
+            return RedirectToAction("DistanceAndPrice", "Order", new { distance = unknown[0], price = unknown[1] });
 
 
         }
@@ -71,8 +71,8 @@ namespace TaxiWebApplication.Controllers
         }
 
         [HttpPost]
-       
-        public async Task<JsonResult> VVDistance([FromBody]TwoMarkersViewModel viewModel)
+
+        public async Task<JsonResult> VVDistance([FromBody] TwoMarkersViewModel viewModel)
         {
             TwoMarkersViewModel coords = new TwoMarkersViewModel
             {
@@ -84,7 +84,7 @@ namespace TaxiWebApplication.Controllers
 
             double dist = await _grs.GraphDistance(coords.FirstLat, coords.FirstLong, coords.SecondLat, coords.SecondLong);
             DistPriceViewModel mod = new DistPriceViewModel { Distance = dist, Price = dist * 6 };
-            
+
 
             return new JsonResult(mod);
         }
@@ -94,7 +94,7 @@ namespace TaxiWebApplication.Controllers
         public IActionResult FindDriver([FromForm] string model)
         {
             var userCoords = model.Split(" ");
-            
+
             ViewData["Lattitude"] = Double.Parse(userCoords[0]);
             ViewData["Longitude"] = Double.Parse(userCoords[1]);
 
@@ -106,7 +106,7 @@ namespace TaxiWebApplication.Controllers
 
         public IActionResult GettingOnTheLine()
         {
-           // _cache.Set(User.Identity.Name, "hi");
+            // _cache.Set(User.Identity.Name, "hi");
 
             return View();
         }
@@ -131,7 +131,7 @@ namespace TaxiWebApplication.Controllers
                     _cache.Remove(User.Identity.Name);
                     _cache.Set(User.Identity.Name, model);
                 }
-               
+
             }
             else
             {
@@ -151,17 +151,19 @@ namespace TaxiWebApplication.Controllers
 
             double lattitude = userCoords.Lattitude;
             double longitude = userCoords.Longitude;
-            return RedirectToAction("OrderWindowPageOpen", "Order", new { 
-                HttpContext.User.Identity.Name, lattitude, longitude
-            });
+            //return RedirectToAction("OrderWindowPageOpen", "Order", new { 
+            //    HttpContext.User.Identity.Name, lattitude, longitude
+            //});
+
+            return new JsonResult(new LatAndLogViewModel { Lattitude = lattitude, Longitude = longitude });
         }
 
-        public IActionResult OrderWindowPageOpen(string name, double lattitude, double longitude)
+        [Authorize(Roles = "user, admin")]
+        [HttpGet()]
+        public IActionResult OrderWindowPageOpen()
         {
-            ViewData["Lattitude"] = lattitude;
-            ViewData["Longitude"] = longitude;
-            ViewData["Name"] = name;
-
+            //ViewData["Lattitude"] = lattitude;
+            //ViewData["Longitude"] = longitude;         
             return View();
         }
     }
