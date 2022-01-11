@@ -15,18 +15,16 @@ namespace TaxiWebApplication
     public class SelectDriverHub : Hub
     {
         private readonly IMemoryCache _cache;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public SelectDriverHub(IMemoryCache cache, UserManager<IdentityUser> userManager)
+        public SelectDriverHub(IMemoryCache cache)
         {
             _cache = cache;
-            _userManager = userManager;
         }
 
-        public async Task SendToMap(string userName, string driverName)
+        public async Task SendToMap(string driverName)
         {
-            var user = await _userManager.FindByNameAsync(userName);
-            var userId = await _userManager.GetUserIdAsync(user);
+            //var user = await _userManager.FindByNameAsync(userName);
+            //var userId = await _userManager.GetUserIdAsync(user);
             LatAndLogViewModelWithDriverStatus driverInfo;
 
             _cache.TryGetValue(driverName, out driverInfo);
@@ -34,7 +32,7 @@ namespace TaxiWebApplication
             var variableForDriverInfo = driverInfo;
             
             
-            await Clients.Client(userId).SendAsync($"{variableForDriverInfo.Lattitude} + {variableForDriverInfo.Longitude}");
+            await Clients.User(Context.UserIdentifier).SendAsync("Getting", $"{variableForDriverInfo.Lattitude} + ' ' + {variableForDriverInfo.Longitude}");
         }
     }
 }

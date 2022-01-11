@@ -12,8 +12,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
 
@@ -22,70 +20,69 @@
 </head>
 <body>
 
-	<h1>@ViewData["Name"]</h1>
-	<h2>@ViewData["Lattitude"]</h2>
-	<h2>@ViewData["Longitude"]</h2>
+    <h1>@ViewData["Name"]</h1>
+    <h2>@ViewData["Lattitude"]</h2>
+    <h2>@ViewData["Longitude"]</h2>
 
 
 
-    <div id="map" style="width: 600px; height: 400px;"></div>
+    <div id="map" style="width: 900px; height: 800px;"></div>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script>
 
-		let url = window.location.href;
-		
-		let coordsIndex = url.indexOf('?');
-		console.log(coordsIndex);
+        var map = L.map('map').setView([50.64086, 29.92616], 13);
 
-		//let coordsVals = url.substr(coordsIndex + 1, url.Length - 1 - coordsIndex);
-		let coordsVals = url.substring(coordsIndex + 1);
+        L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=y8obR85WfJgHplTVkbz9', {
+            tileSize: 512,
+            zoomOffset: -1,
+            minZoom: 1,
+            attribution: "\u003ca href=\"https://www.maptiler.com/copyright/\" target=\"_blank\"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e",
+            crossOrigin: true,
+            accessToken: "your.mapbox.access.token"
 
-		console.log(coordsVals);
-		let arrayOfCoordinates = coordsVals.split('&');
+        }).addTo(map);
 
-		var map = L.map('map').setView([51.505, -0.09], 13);
+        var taxiIcon = L.icon({
+            iconUrl: 'https://localhost:5001/images/taxCar.png',
 
-        var tiles = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=y8obR85WfJgHplTVkbz9', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox/streets-v11',
-		tileSize: 512,
-		zoomOffset: -1
-	}).addTo(map);
+            iconSize: [50, 60], // size of the icon
+            iconAnchor: [6, 27], // point of the icon which will correspond to marker's location
+            popupAnchor: [-2, -5] // point from which the popup should open relative to the iconAnchor
+        });
 
-	var marker = L.marker([51.5, -0.09]).addTo(map)
-			.bindPopup('<b>Hello world!</b><br />I am a popup.').openPopup();
+        let url = window.location.href;
+        let arrayOfDriverCoordinates;
+        let coordsIndex = url.indexOf('?');
+        console.log(coordsIndex);
 
-        var myMarker = L.marker([arrayOfCoordinates[0], arrayOfCoordinates[1]]).addTo(map)
-            .bindPopup('<b>Hello world!</b><br />I am a popup.').openPopup();
+        //let coordsVals = url.substr(coordsIndex + 1, url.Length - 1 - coordsIndex);
+        let coordsVals = url.substring(coordsIndex + 1);
 
-	//var circle = L.circle([51.508, -0.11], {
-	//	color: 'red',
-	//	fillColor: '#f03',
-	//	fillOpacity: 0.5,
-	//	radius: 500
-	//}).addTo(map).bindPopup('I am a circle.');
+        console.log(coordsVals);
+        let arrayOfCoordinates = coordsVals.split('&');
+        var myMarker = L.marker([50.69, 29.951]).addTo(map)
+            .bindPopup('<b>Hello world!</b><br />This is your locatiob.');
 
-	//var polygon = L.polygon([
-	//	[51.509, -0.08],
-	//	[51.503, -0.06],
-	//	[51.51, -0.047]
-	//]).addTo(map).bindPopup('I am a polygon.');
+        const connection = new signalR.HubConnectionBuilder().withUrl("/SelectDriverHub").build();
+        connection.start().then(() => { setInterval(function () { connection.invoke("SendToMap", "konforovich") }, 10000)});
+        console.log('sashki');
 
+        let func = (arr) => {
+            console.log('brinza');
+            console.log(arrayOfCoordinates[0]);
+            console.log(arrayOfCoordinates[1]);
+            
+            var marka = L.marker([arr[0], arr[5]], { icon: taxiIcon }).addTo(map)
+                .bindPopup('<b>Hello!</b><br />This is your driver.').openPopup();
+        };
 
-	//var popup = L.popup()
-	//	.setLatLng([51.513, -0.09])
-	//	.setContent('I am a standalone popup.')
-	//	.openOn(map);
+        connection.on("Getting", function (coords) {
 
-	function onMapClick(e) {
-		popup
-			.setLatLng(e.latlng)
-			.setContent('You clicked the map at ' + e.latlng.toString())
-			.openOn(map);
-	}
-
-	map.on('click', onMapClick);
+            console.log('benya');
+            arrayOfDriverCoordinates = coords.split(' ');
+            console.log(arrayOfDriverCoordinates[5]);
+            func(arrayOfDriverCoordinates);
+        });
 
     </script>
 

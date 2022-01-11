@@ -35,8 +35,6 @@
 
         const connection = new signalR.HubConnectionBuilder().withUrl("/orderHub").build();
 
-        let ButtonGo = document.getElementById('GoGoGo');
-
         connection.on("Receive", function (userName) {
 
             var encodedMsg = userName + "";
@@ -54,7 +52,7 @@
 
         connection.start();
 
-        ButtonGo.onclick = async function GoToOrder() {
+        document.getElementById('GoGoGo').onclick = async function GoToOrder() {
 
             let CoordObj = {
                 Lattitude : @ViewData["Lattitude"],

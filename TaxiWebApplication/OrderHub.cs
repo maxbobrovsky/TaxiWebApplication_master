@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,15 +45,17 @@ namespace TaxiWebApplication
                                               {
                                                   UserName = h.NickName,
                                                   Role = ro.Name
-                                              }).Where(x => x.Role == "driver");                                             
+                                              }).Where(x => x.Role == "driver");
+
 
             List<string> names = new List<string>();
 
-            LatAndLogViewModel coord;
+            LatAndLogViewModelWithDriverStatus coord;
 
             foreach(var u in drivers)
             {
-                if (_cache.TryGetValue(u.UserName, out coord))
+                var usr = u.UserName;
+                if (_cache.TryGetValue(usr, out coord))
                 {
                     names.Add(u.UserName + " " + KnnService.DistanceToDest(new double[] { double.Parse(user_lat), double.Parse(user_lon) }, new double[] { coord.Lattitude, coord.Longitude}) + " km-s to you");
                 }

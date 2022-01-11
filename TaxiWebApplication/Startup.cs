@@ -28,7 +28,9 @@ namespace TaxiWebApplication
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
+            services.AddSignalR( o =>
+                 { o.EnableDetailedErrors = true; }
+                );
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -65,6 +67,7 @@ namespace TaxiWebApplication
             services.AddSingleton<KnnService>();
 
             services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
 
             services.AddControllersWithViews(options => { options.RespectBrowserAcceptHeader = true;
                                                           options.ReturnHttpNotAcceptable = true;})
@@ -106,7 +109,9 @@ namespace TaxiWebApplication
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                
                 endpoints.MapHub<OrderHub>("/orderHub");
-                
+
+                endpoints.MapHub<SelectDriverHub>("/SelectDriverHub");
+
             });
         }
     }

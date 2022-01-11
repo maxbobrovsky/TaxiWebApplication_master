@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json.Linq;
 using TaxiWebApplication.Models;
@@ -120,7 +121,8 @@ namespace TaxiWebApplication.Controllers
             LatAndLogViewModelWithDriverStatus helperModel;
             if ((_cache.TryGetValue(User.Identity.Name, out helperModel)))
             {
-                if ((model.Lattitude == helperModel.Lattitude) && (model.Longitude == helperModel.Longitude) && (model.Status == "Free"))
+                
+                if ((model.Lattitude == helperModel.Lattitude) && (model.Longitude == helperModel.Longitude))
                 {
                     _cache.Remove(User.Identity.Name);
                     //RedirectToAction("DriverIndex", "Account");
@@ -131,7 +133,7 @@ namespace TaxiWebApplication.Controllers
                     _cache.Remove(User.Identity.Name);
                     _cache.Set(User.Identity.Name, model);
                 }
-
+                
             }
             else
             {
