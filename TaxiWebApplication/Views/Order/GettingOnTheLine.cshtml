@@ -8,7 +8,7 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
 
-    let reload_page = setInterval(() => location.reload(), 15000);
+    let reload_page = setInterval(() => location.reload(), 20000);
 
     $(function () {
 
@@ -42,7 +42,7 @@
             if (gotObj == 'afk') {
 
                 console.log(gotObj);
-                setTimeout(() => { clearInterval(reload_page); document.location.href = "https://localhost:5001/Account/DriverIndex"; }, 500);
+                setTimeout(() => { clearInterval(reload_page); document.location.href = "https://localhost:5001/Account/DriverIndex"; }, 5000);
             }
 
             console.log(gotObj);

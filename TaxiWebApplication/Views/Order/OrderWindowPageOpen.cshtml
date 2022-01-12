@@ -14,7 +14,10 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
 
 </head>
@@ -55,7 +58,6 @@
         let coordsIndex = url.indexOf('?');
         console.log(coordsIndex);
 
-        //let coordsVals = url.substr(coordsIndex + 1, url.Length - 1 - coordsIndex);
         let coordsVals = url.substring(coordsIndex + 1);
 
         console.log(coordsVals);
@@ -64,16 +66,24 @@
             .bindPopup('<b>Hello world!</b><br />This is your locatiob.');
 
         const connection = new signalR.HubConnectionBuilder().withUrl("/SelectDriverHub").build();
-        connection.start().then(() => { setInterval(function () { connection.invoke("SendToMap", "konforovich") }, 10000)});
+        connection.start().then(() => { setInterval(function () { connection.invoke("SendToMap", "konforovich") }, 10000) });
         console.log('sashki');
 
         let func = (arr) => {
             console.log('brinza');
             console.log(arrayOfCoordinates[0]);
             console.log(arrayOfCoordinates[1]);
-            
+
             var marka = L.marker([arr[0], arr[5]], { icon: taxiIcon }).addTo(map)
                 .bindPopup('<b>Hello!</b><br />This is your driver.').openPopup();
+
+            var orderRoute = L.Routing.control({
+                waypoints: [    
+                    L.latLng(arr[0], arr[5]),
+                    L.latLng(50.69, 29.951)
+                ],
+               // show: false
+            }).addTo(map);
         };
 
         connection.on("Getting", function (coords) {

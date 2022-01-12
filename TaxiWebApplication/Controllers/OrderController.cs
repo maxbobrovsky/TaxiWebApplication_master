@@ -149,13 +149,8 @@ namespace TaxiWebApplication.Controllers
         public IActionResult OrderWindowPage([FromBody] LatAndLogViewModel userCoords)
         {
             //ViewData["Lattitude"] = userCoords.Lattitude;
-            //ViewData["Longitude"] = userCoords.Longitude;
-
             double lattitude = userCoords.Lattitude;
             double longitude = userCoords.Longitude;
-            //return RedirectToAction("OrderWindowPageOpen", "Order", new { 
-            //    HttpContext.User.Identity.Name, lattitude, longitude
-            //});
 
             return new JsonResult(new LatAndLogViewModel { Lattitude = lattitude, Longitude = longitude });
         }

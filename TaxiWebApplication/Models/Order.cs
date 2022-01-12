@@ -10,19 +10,13 @@ namespace TaxiWebApplication.Models
 {
     public class Order
     {
-
         public Guid Id { get; set; }
 
-        //public bool State { get; set; } = false;
-        public string Address { get; set; }
+        public User Passenger { get; set; }
 
-        [ForeignKey(nameof(User))]
-        public string UserId { get; set; }
-
-        //public User User { get; set; }
+        public User Driver { get; set; }
 
         public DateTime OrderCreated { get; set; } = DateTime.Now;
-
     }
 
 
