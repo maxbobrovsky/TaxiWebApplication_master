@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -26,7 +27,6 @@ namespace TaxiWebApplication.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMemoryCache _cache;
         private readonly GetCacheKeysService _getKeys;
-        private readonly ApplicationContext _context;
         //  private readonly UserManagerService _userService;
 
         public OrderController(ApplicationContext adb, IUserManagerService userService, UserManager<User> userManager,
@@ -174,8 +174,10 @@ namespace TaxiWebApplication.Controllers
 
             double lattitude = userCoords.Lattitude;
             double longitude = userCoords.Longitude;
-            string driverUsernameForOrder = String.Empty;
-            
+            var order = new Order { Driver = await _userManager.FindByNameAsync(SelectedDriverName), Passenger = await _userManager.GetUserAsync(HttpContext.User)};
+            var adding = await _adb.Orders.AddAsync(order);
+            _adb.SaveChanges();
+            Response.StatusCode = 200;
             return new JsonResult(new LatAndLogViewModelWithDriverName { Lattitude = lattitude, Longitude = longitude, DriverName = SelectedDriverName });
         }
 
