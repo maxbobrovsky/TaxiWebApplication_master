@@ -63,6 +63,7 @@ namespace TaxiWebApplication
 
 
             services.AddTransient<GraphRoadService>();
+            services.AddTransient<GetCacheKeysService>();
 
             services.AddSingleton<KnnService>();
 

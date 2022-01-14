@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -23,10 +25,12 @@ namespace TaxiWebApplication.Controllers
         private readonly GraphRoadService _grs;
         private readonly UserManager<User> _userManager;
         private readonly IMemoryCache _cache;
+        private readonly GetCacheKeysService _getKeys;
+        private readonly ApplicationContext _context;
         //  private readonly UserManagerService _userService;
 
         public OrderController(ApplicationContext adb, IUserManagerService userService, UserManager<User> userManager,
-            KnnService knn, GraphRoadService grs, IMemoryCache cache)
+            KnnService knn, GraphRoadService grs, IMemoryCache cache, GetCacheKeysService getKeys)
         {
             _adb = adb;
             _userManager = userManager;
@@ -34,6 +38,7 @@ namespace TaxiWebApplication.Controllers
             _knn = knn;
             _grs = grs;
             _cache = cache;
+            _getKeys = getKeys;
         }
 
         [HttpGet]
@@ -146,13 +151,32 @@ namespace TaxiWebApplication.Controllers
         [Authorize(Roles = "user, admin")]
         [HttpPost]
 
-        public IActionResult OrderWindowPage([FromBody] LatAndLogViewModel userCoords)
+        public async Task<IActionResult> OrderWindowPage([FromBody] LatAndLogViewModel userCoords)
         {
-            //ViewData["Lattitude"] = userCoords.Lattitude;
+            
+            List<string> drivers = _getKeys.GetKeys();
+            double distance = 0.0;
+            string SelectedDriverName = String.Empty;
+            LatAndLogViewModelWithDriverStatus model;
+            foreach(var key in drivers)
+            {
+                if(_cache.TryGetValue(key, out model))
+                {
+                    var distanceBetweenUsers = _grs.GraphDistance(userCoords.Lattitude, userCoords.Longitude, model.Lattitude, model.Longitude).GetAwaiter().GetResult();
+                    if (distance <= distanceBetweenUsers)
+                    {
+                        distance = distanceBetweenUsers;
+                        SelectedDriverName = key;
+                    }
+                }
+                continue;
+            }
+
             double lattitude = userCoords.Lattitude;
             double longitude = userCoords.Longitude;
-
-            return new JsonResult(new LatAndLogViewModel { Lattitude = lattitude, Longitude = longitude });
+            string driverUsernameForOrder = String.Empty;
+            
+            return new JsonResult(new LatAndLogViewModelWithDriverName { Lattitude = lattitude, Longitude = longitude, DriverName = SelectedDriverName });
         }
 
         [Authorize(Roles = "user, admin")]
