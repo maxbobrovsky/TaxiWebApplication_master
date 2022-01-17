@@ -60,8 +60,6 @@ namespace TaxiWebApplication
                 return Task.CompletedTask;
             };
         });
-
-
             services.AddTransient<GraphRoadService>();
             services.AddTransient<GetCacheKeysService>();
 
@@ -77,9 +75,6 @@ namespace TaxiWebApplication
             services.AddHttpContextAccessor();
             
             services.AddTransient<IUserManagerService, UserManagerService>();
-            
-
-            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

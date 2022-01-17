@@ -2,13 +2,26 @@
     Layout = null;
 }
 
-
+<html>
 <head>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/car.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
-<h1>Hello driver!!</h1>
+<body>
+    <div class="hero">
+        <h1>Hello driver!!</h1>
+        <a asp-controller="Order" asp-action="GettingOnTheLine" class="btn btn-primary driverBtn" role="button" data-bs-toggle="button">Get on the line </a>
+        <div class="highway"></div>
+        <div class="city"></div>
+        <div class="carr">
+            <img src="/images/car.png">
+        </div>
+        <div class="wheel">
+            <img src="/images/wheel.png" class="back-wheel">
+            <img src="/images/wheel.png" class="front-wheel">
+        </div>
+    </div>
 
-<img src="~/images/maxresdefault.jpg" class="ordimg" alt="Order" />
-
-<a asp-controller="Order" asp-action="GettingOnTheLine" class="btn btn-primary" role="button" data-bs-toggle="button">Get on the line </a>
+@*<img src="~/images/maxresdefault.jpg" class="ordimg" alt="Order" />*@
+</body>
+</html>
