@@ -49,16 +49,16 @@
     }
 }
 
-.carr {
-    width: 400px;
+.casa {
+    width: 442px;
     left: 50%;
-    bottom: 100px;
+    bottom: 83px;
     transform: translateX(-50%);
     position: absolute;
     z-index: 2;
 }
 
-.carr img
+.casa img
 {
     width: 100%;
     animation: car 1s linear infinite;
@@ -88,8 +88,8 @@
 }
 
 .wheel img {
-    width: 72px;
-    height: 72px;
+    width: 70px;
+    height: 70px;
     animation: wheel 1s linear infinite;
 }
 
@@ -99,7 +99,7 @@
 }
 
 .front-wheel {
-    left: 80px;
+    left: 86px;
     position: absolute;
 }
 
@@ -119,8 +119,20 @@
     margin-left: 35px;
     position: absolute;
     z-index: 10;
+    background-color: #000000 !important;
+    color: #ffd800 !important;
+    font-size: 26px !important;
+}
+/*
+    .driverBtn .btn-primary .btn :hover, .btn-primary:active, .btn-primary:visited {
+        background-color: #000000 !important;
+        color: black !important;
+    }*/
+.driverBtn:hover{
+    color: #808080;
+    background-color: #1b6ec2 !important;
+    border-color: #1861ac !important;
 }
 
-.driverBtn .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
-    background-color: #00ff21 !important;
-}
+
+
