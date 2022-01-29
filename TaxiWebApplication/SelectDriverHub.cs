@@ -23,16 +23,11 @@ namespace TaxiWebApplication
 
         public async Task SendToMap(string driverName)
         {
-            //var user = await _userManager.FindByNameAsync(userName);
-            //var userId = await _userManager.GetUserIdAsync(user);
             LatAndLogViewModelWithDriverStatus driverInfo;
-
             _cache.TryGetValue(driverName, out driverInfo);
-
-            var variableForDriverInfo = driverInfo;
-            
-            
-            await Clients.User(Context.UserIdentifier).SendAsync("Getting", $"{variableForDriverInfo.Lattitude} + ' ' + {variableForDriverInfo.Longitude}");
+            var variableForDriverInfo = driverInfo;            
+            await Clients.User(Context.UserIdentifier)
+                    .SendAsync("Getting", $"{variableForDriverInfo.Lattitude} + ' ' + {variableForDriverInfo.Longitude}");
         }
     }
 }
