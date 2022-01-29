@@ -15,11 +15,8 @@ namespace TaxiWebApplication
         public OrderHub(ApplicationContext context, IMemoryCache cache)
         {
             _context = context;
-            _cache = cache;
-            //usersId = _context.Users.ToList();        
+            _cache = cache;      
         }
-
-        //List usersId = new List<string>();
         private ApplicationContext _context;
         private IMemoryCache _cache;
 
@@ -28,13 +25,6 @@ namespace TaxiWebApplication
         {
             var user = Context.User;
             var userName = Context.User.Identity.Name;
-
-            //var userName = user.IsInRole("user");
-
-            //var drivers = _context.Users.Where(x => x.UserName != "").ToString();
-
-            //var drivers = _context.Users.Where(x => x.UserName != "");
-
             var Helper_drivers = _context.Users.Join(_context.UserRoles,
                                     u => u.Id,
                                     r => r.UserId,
@@ -56,7 +46,6 @@ namespace TaxiWebApplication
                                                
 
             List<string> names = new List<string>();
-
             LatAndLogViewModel coord;
 
             foreach(var u in drivers)
@@ -67,10 +56,7 @@ namespace TaxiWebApplication
                 }
                 continue;
             }
-
-
             await Clients.User(Context.UserIdentifier).SendAsync("Receive", string.Join(" ", names));
-
         }
     }
 }
