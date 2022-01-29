@@ -203,7 +203,7 @@ li a:hover {
     background: url(/images/images228.png);
     width: 61px;
     height: 100px;
-    animation: walk 4s steps(8) infinite, forward 6s linear infinite;
+    animation: walk 4s steps(8) infinite, forward +5.5s linear infinite;
 }
 
 @keyframes walk {
