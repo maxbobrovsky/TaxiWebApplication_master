@@ -106,7 +106,7 @@ namespace TaxiWebApplication.Controllers
             return View();
         }
 
-
+            // need to add driver status to cache/next step
         [Authorize(Roles = "driver")]
         [HttpPost]
 
